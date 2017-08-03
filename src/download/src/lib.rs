@@ -251,6 +251,7 @@ pub mod reqwest_be {
             .map(|(addr, port)| {
                 String::from(format!("{}:{}", addr, port))
             });
+
         let client = match url.scheme() {
             "https" => match maybe_proxy {
                 None => Client::new()?,
@@ -280,7 +281,7 @@ pub mod reqwest_be {
                 .send()
         } else {
             client.get(url.clone())?.send()
-        }.chain_err(|| "failed to make network reqwest")?;
+        }.chain_err(|| "failed to make network request")?;
 
         if !res.status().is_success() {
             let code: u16 = res.status().into();
