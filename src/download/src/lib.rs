@@ -247,6 +247,11 @@ pub mod reqwest_be {
                     callback: &Fn(Event) -> Result<()>)
                     -> Result<()> {
 
+        // Short-circuit reqwest for the "file:" URL scheme
+        if try!(download_from_file_url(url, callback)) {
+            return Ok(());
+        }
+
         let maybe_proxy = env_proxy::for_url(url)
             .map(|(addr, port)| {
                 String::from(format!("{}:{}", addr, port))
@@ -304,6 +309,42 @@ pub mod reqwest_be {
             } else {
                 return Ok(());
             }
+        }
+    }
+
+    fn download_from_file_url(url: &Url,
+                              callback: &Fn(Event) -> Result<()>)
+                              -> Result<bool> {
+
+        use std::fs;
+        use std::io;
+
+        // The file scheme is mostly for use by tests to mock the dist server
+        if url.scheme() == "file" {
+            let src = try!(url.to_file_path()
+                           .map_err(|_| Error::from(format!("bogus file url: '{}'", url))));
+            if !src.is_file() {
+                // Because some of rustup's logic depends on checking
+                // the error when a downloaded file doesn't exist, make
+                // the file case return the same error value as the
+                // network case.
+                return Err(ErrorKind::FileNotFound.into());
+            }
+
+            let ref mut f = try!(fs::File::open(src)
+                                 .chain_err(|| "unable to open downloaded file"));
+
+            let ref mut buffer = vec![0u8; 0x10000];
+            loop {
+                let bytes_read = try!(io::Read::read(f, buffer)
+                                      .chain_err(|| "unable to read downloaded file"));
+                if bytes_read == 0 { break }
+                try!(callback(Event::DownloadDataReceived(&buffer[0..bytes_read])));
+            }
+
+            Ok(true)
+        } else {
+            Ok(false)
         }
     }
 }
