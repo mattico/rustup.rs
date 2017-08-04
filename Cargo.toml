@@ -67,6 +67,7 @@ lazy_static = "0.1.15"
 [workspace]
 members = ["src/rustup-win-installer"]
 
+
 [lib]
 name = "rustup"
 path = "src/rustup/lib.rs"
