@@ -77,3 +77,6 @@ test = false # no unit tests
 name = "rustup-init"
 path = "src/rustup-cli/main.rs"
 test = false # no unit tests
+
+[replace]
+"net2:0.2.30" = { git = "https://github.com/mattico/net2-rs", branch = "fix-x64-android-build" }
