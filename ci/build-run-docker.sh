@@ -14,10 +14,8 @@ fi
 
 docker run \
   --entrypoint bash \
-  -u `id -u`:`id -g` \
-  -v $HOME/rust:/travis-rust:ro \
-  -v `pwd`:/buildslave:ro \
-  -v `pwd`/target:/buildslave/target \
+  -v C:/Users/matth/Code/Rust/rustup.rs:/buildslave:ro \
+  -v C:/Users/matth/Code/Rust/rustup.rs/target:/buildslave/target \
   -e TARGET=$TARGET \
   -e SKIP_TESTS=$SKIP_TESTS \
   -it $DOCKER \

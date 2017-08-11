@@ -47,7 +47,7 @@ matrix:
            SKIP_TESTS=1
     - os: linux
       env: TARGET=powerpc64-unknown-linux-gnu
-           DOCKER=alexcrichton/rust-slave-linux-cross:2016-11-11
+           DOCKER=linux-cross
            SKIP_TESTS=1
     - os: linux
       env: TARGET=powerpc64le-unknown-linux-gnu
@@ -55,11 +55,11 @@ matrix:
            SKIP_TESTS=1
     - os: linux
       env: TARGET=mips-unknown-linux-gnu
-           DOCKER=alexcrichton/rust-slave-linux-cross:2016-11-11
+           DOCKER=linux-cross
            SKIP_TESTS=1
     - os: linux
       env: TARGET=mipsel-unknown-linux-gnu
-           DOCKER=alexcrichton/rust-slave-linux-cross:2016-11-11
+           DOCKER=linux-cross
            SKIP_TESTS=1
     - os: linux
       env: TARGET=mips64-unknown-linux-gnuabi64
